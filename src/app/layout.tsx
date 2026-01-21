@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Playfair_Display, Inter } from "next/font/google";
 import "@/app/globals.css";
+import { siteConfig } from "@/lib/env";
+import { Footer } from "@/components/layout/Footer";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -16,10 +18,10 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    template: "%s | Ruhenna",
-    default: "Ruhenna",
+    template: `%s | ${siteConfig.brandName}`,
+    default: siteConfig.brandName,
   },
-  description: "Découvrez Ruhenna : votre spécialiste de l'art du henné. Achat de cônes de henné en ligne et réservation de prestations sur mesure pour vos événements.",
+  description: siteConfig.brandDescription,
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"
   ),
@@ -32,7 +34,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr" className={`${playfair.variable} ${inter.variable}`}>
-      <body className="min-h-screen font-body">{children}</body>
+      <body className="min-h-screen font-body">
+        {children}
+        <Footer />
+      </body>
     </html>
   );
 }
