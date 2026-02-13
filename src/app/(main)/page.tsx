@@ -78,9 +78,9 @@ export default function HomePage() {
             muted
             loop
             playsInline
-            poster="/assets/placeholders/hero-poster.svg"
+            poster="/assets/logo.png"
           >
-            <source src="" type="video/mp4" />
+            <source src="/assets/logo.png" type="video/mp4" />
           </video>
           <div
             className="absolute inset-0 bg-gradient-to-b from-bg-dark/60 via-bg-dark/40 to-bg-dark/80"
