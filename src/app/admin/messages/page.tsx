@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Mail, Archive, Check } from "lucide-react";
+import { LuMail, LuArchive, LuCheck } from "react-icons/lu";
 
 const MOCK_MESSAGES = [
   { id: 1, sender: "Marie D.", subject: "Question sur le henné pour mariage", date: "28 fév. 2025, 14h30", read: false, content: "Bonjour, je souhaiterais avoir des informations sur vos prestations henné pour un mariage prévu en juin. Pourriez-vous me recontacter ? Merci." },
@@ -50,10 +50,10 @@ export default function AdminMessagesPage() {
                 </div>
                 <div className="flex gap-2">
                   <button type="button" className="inline-flex items-center gap-2 rounded-lg border border-warm-dark/40 px-3 py-2 text-sm font-medium text-text hover:bg-warm/50 transition-colors">
-                    <Check className="h-4 w-4" />Marquer comme lu
+                    <LuCheck className="h-4 w-4" />Marquer comme lu
                   </button>
                   <button type="button" onClick={() => setArchivedIds((prev) => new Set(prev).add(selectedMessage.id))} className="inline-flex items-center gap-2 rounded-lg border border-warm-dark/40 px-3 py-2 text-sm font-medium text-text hover:bg-warm/50 transition-colors">
-                    <Archive className="h-4 w-4" />Archiver
+                    <LuArchive className="h-4 w-4" />Archiver
                   </button>
                 </div>
               </div>
@@ -63,7 +63,7 @@ export default function AdminMessagesPage() {
             </>
           ) : (
             <div className="flex-1 flex flex-col items-center justify-center text-text-light p-8">
-              <Mail className="h-16 w-16 mb-4 opacity-50" />
+              <LuMail className="h-16 w-16 mb-4 opacity-50" />
               <p>Sélectionnez un message pour le lire</p>
             </div>
           )}

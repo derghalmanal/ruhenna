@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Plus, Pencil, Trash2, Search } from "lucide-react";
+import { LuPlus, LuPencil, LuTrash2, LuSearch } from "react-icons/lu";
 
 const MOCK_PRODUCTS = [
   {
@@ -91,7 +91,7 @@ export default function AdminProduitsPage() {
           href="/admin/produits/nouveau"
           className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 font-medium text-text-inverse transition-colors hover:bg-primary-light"
         >
-          <Plus className="h-4 w-4" />
+          <LuPlus className="h-4 w-4" />
           Ajouter un produit
         </Link>
       </div>
@@ -99,7 +99,7 @@ export default function AdminProduitsPage() {
       {/* Search and filter */}
       <div className="flex flex-col gap-4 sm:flex-row">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-text-light" />
+          <LuSearch className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-text-light" />
           <input
             type="text"
             placeholder="Rechercher un produit..."
@@ -204,14 +204,14 @@ export default function AdminProduitsPage() {
                         className="rounded-lg p-2 text-text hover:bg-primary/15 hover:text-primary transition-colors"
                         aria-label="Modifier"
                       >
-                        <Pencil className="h-4 w-4" />
+                        <LuPencil className="h-4 w-4" />
                       </button>
                       <button
                         type="button"
                         className="rounded-lg p-2 text-text hover:bg-red-100 hover:text-red-600 transition-colors"
                         aria-label="Supprimer"
                       >
-                        <Trash2 className="h-4 w-4" />
+                        <LuTrash2 className="h-4 w-4" />
                       </button>
                     </div>
                   </td>

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Heart, Award, Gem } from "lucide-react";
+import { LuHeart, LuAward, LuGem } from "react-icons/lu";
 
 const MILESTONES = [
   { year: "2023", title: "Début de l'aventure", description: "Premiers pas dans l'art du henné et formation aux techniques traditionnelles." },
@@ -10,9 +10,9 @@ const MILESTONES = [
 ];
 
 const VALUES = [
-  { icon: Heart, title: "Passion", description: "Chaque motif est créé avec amour et dévouement à l'art ancestral du henné." },
-  { icon: Award, title: "Qualité", description: "Des produits naturels et des techniques soignées pour un résultat durable." },
-  { icon: Gem, title: "Authenticité", description: "Respect des traditions tout en apportant une touche personnelle et créative." },
+  { icon: LuHeart, title: "Passion", description: "Chaque motif est créé avec amour et dévouement à l'art ancestral du henné." },
+  { icon: LuAward, title: "Qualité", description: "Des produits naturels et des techniques soignées pour un résultat durable." },
+  { icon: LuGem, title: "Authenticité", description: "Respect des traditions tout en apportant une touche personnelle et créative." },
 ];
 
 export default function AProposPage() {

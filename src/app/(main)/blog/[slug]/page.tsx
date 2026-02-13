@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { LuArrowLeft } from "react-icons/lu";
 import type { Metadata } from "next";
 import { siteConfig } from "@/lib/env";
 
@@ -88,7 +88,7 @@ export default async function BlogArticlePage({ params }: Props) {
         <div className="container-narrow text-center">
           <h1 className="font-heading text-2xl font-bold text-text">Article non trouvé</h1>
           <Link href="/blog" className="mt-6 inline-flex items-center gap-2 text-primary hover:text-accent">
-            <ArrowLeft className="h-4 w-4" />
+            <LuArrowLeft className="h-4 w-4" />
             Retour au blog
           </Link>
         </div>
@@ -114,7 +114,7 @@ export default async function BlogArticlePage({ params }: Props) {
           </div>
           <footer className="mt-12 border-t border-warm-dark/30 pt-8">
             <Link href="/blog" className="inline-flex items-center gap-2 font-medium text-primary transition-colors hover:text-accent">
-              <ArrowLeft className="h-4 w-4" />
+              <LuArrowLeft className="h-4 w-4" />
               Retour au blog
             </Link>
           </footer>

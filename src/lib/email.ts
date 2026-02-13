@@ -11,7 +11,7 @@ function getResend() {
   return new Resend(key);
 }
 
-const fromEmail = process.env.RESEND_FROM_EMAIL ?? "noreply@example.com";
+const fromEmail = process.env.EMAIL_FROM ?? "noreply@example.com";
 
 export async function sendOrderConfirmation(
   order: Order & { items: (OrderItem & { product: { name: string } })[] }

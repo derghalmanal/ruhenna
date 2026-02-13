@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { LuArrowRight } from "react-icons/lu";
 
 const MOCK_POSTS = [
   { slug: "traditions-henne-mariage", title: "Les traditions du henné dans les mariages", excerpt: "Découvrez l'histoire et la symbolique du henné dans les cérémonies de mariage à travers les cultures.", date: "15 février 2026", image: "/assets/logo.png" },
@@ -38,7 +38,7 @@ export default function BlogPage() {
                   <p className="mt-2 flex-1 text-text-light line-clamp-3">{post.excerpt}</p>
                   <Link href={`/blog/${post.slug}`} className="mt-4 inline-flex items-center gap-2 font-medium text-primary transition-colors hover:text-accent">
                     Lire la suite
-                    <ArrowRight className="h-4 w-4" />
+                    <LuArrowRight className="h-4 w-4" />
                   </Link>
                 </div>
               </article>

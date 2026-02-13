@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { X, Calendar } from "lucide-react";
+import { LuX, LuCalendar } from "react-icons/lu";
 
 const GALLERY_IMAGES = [
   { id: 1, src: "/assets/galery/henne_1.jpg", title: "Création henné 1" },
@@ -70,7 +70,7 @@ export default function GaleriePage() {
             href="/reservation"
             className="mt-6 inline-flex items-center gap-2 rounded-full bg-primary px-8 py-4 font-semibold text-text-inverse shadow-lg transition-all hover:bg-primary-light hover:shadow-xl"
           >
-            <Calendar className="h-5 w-5" />
+            <LuCalendar className="h-5 w-5" />
             Prendre rendez-vous
           </Link>
         </div>
@@ -86,7 +86,7 @@ export default function GaleriePage() {
             className="absolute right-4 top-4 rounded-full p-2 text-text-inverse transition-colors hover:bg-white/20"
             aria-label="Fermer"
           >
-            <X className="h-8 w-8" />
+            <LuX className="h-8 w-8" />
           </button>
           <div
             className="relative max-h-[90vh] max-w-4xl w-full aspect-[1/1]"

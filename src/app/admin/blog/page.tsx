@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Plus, Pencil, Send, Trash2 } from "lucide-react";
+import { LuPlus, LuPencil, LuSend, LuTrash2 } from "react-icons/lu";
 
 const MOCK_POSTS = [
   { id: 1, titre: "Les traditions du henné dans les mariages", statut: "publié", date: "15 janv. 2025" },
@@ -17,7 +17,7 @@ export default function AdminBlogPage() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="font-heading text-2xl font-bold text-text">Gestion du Blog</h1>
         <Link href="/admin/blog/nouveau" className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 font-medium text-text-inverse transition-colors hover:bg-primary-light">
-          <Plus className="h-4 w-4" />Nouvel article
+          <LuPlus className="h-4 w-4" />Nouvel article
         </Link>
       </div>
       <div className="overflow-hidden rounded-xl border border-warm-dark/20 bg-white shadow-sm">
@@ -41,9 +41,9 @@ export default function AdminBlogPage() {
                   <td className="whitespace-nowrap px-6 py-4 text-sm text-text-light">{post.date}</td>
                   <td className="whitespace-nowrap px-6 py-4 text-right">
                     <div className="flex justify-end gap-2">
-                      <button type="button" className="rounded-lg p-2 text-text hover:bg-primary/15 hover:text-primary transition-colors" aria-label="Modifier"><Pencil className="h-4 w-4" /></button>
-                      {post.statut === "brouillon" && (<button type="button" className="rounded-lg p-2 text-text hover:bg-green-100 hover:text-green-600 transition-colors" aria-label="Publier"><Send className="h-4 w-4" /></button>)}
-                      <button type="button" className="rounded-lg p-2 text-text hover:bg-red-100 hover:text-red-600 transition-colors" aria-label="Supprimer"><Trash2 className="h-4 w-4" /></button>
+                      <button type="button" className="rounded-lg p-2 text-text hover:bg-primary/15 hover:text-primary transition-colors" aria-label="Modifier"><LuPencil className="h-4 w-4" /></button>
+                      {post.statut === "brouillon" && (<button type="button" className="rounded-lg p-2 text-text hover:bg-green-100 hover:text-green-600 transition-colors" aria-label="Publier"><LuSend className="h-4 w-4" /></button>)}
+                      <button type="button" className="rounded-lg p-2 text-text hover:bg-red-100 hover:text-red-600 transition-colors" aria-label="Supprimer"><LuTrash2 className="h-4 w-4" /></button>
                     </div>
                   </td>
                 </tr>

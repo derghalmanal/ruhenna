@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Plus, Pencil, Trash2, GripVertical } from "lucide-react";
+import { LuPlus, LuPencil, LuTrash2, LuGripVertical } from "react-icons/lu";
 
 const MOCK_IMAGES = [
   { id: 1, src: "/assets/logo.png", categorie: "Mariages" },
@@ -33,7 +33,7 @@ export default function AdminGaleriePage() {
           type="button"
           className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 font-medium text-text-inverse transition-colors hover:bg-primary-light"
         >
-          <Plus className="h-4 w-4" />
+          <LuPlus className="h-4 w-4" />
           Ajouter une image
         </button>
       </div>
@@ -78,21 +78,21 @@ export default function AdminGaleriePage() {
                 className="rounded-lg bg-white/90 p-2 text-text hover:bg-white"
                 aria-label="Réordonner"
               >
-                <GripVertical className="h-4 w-4" />
+                <LuGripVertical className="h-4 w-4" />
               </button>
               <button
                 type="button"
                 className="rounded-lg bg-white/90 p-2 text-text hover:bg-white"
                 aria-label="Modifier"
               >
-                <Pencil className="h-4 w-4" />
+                <LuPencil className="h-4 w-4" />
               </button>
               <button
                 type="button"
                 className="rounded-lg bg-white/90 p-2 text-red-600 hover:bg-white"
                 aria-label="Supprimer"
               >
-                <Trash2 className="h-4 w-4" />
+                <LuTrash2 className="h-4 w-4" />
               </button>
             </div>
             <span className="absolute bottom-2 left-2 rounded bg-bg-dark/80 px-2 py-1 text-xs text-text-inverse">

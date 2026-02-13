@@ -1,7 +1,7 @@
 "use client";
 
 import { Fragment, useState } from "react";
-import { Search, ChevronDown, ChevronUp } from "lucide-react";
+import { LuSearch, LuChevronDown, LuChevronUp } from "react-icons/lu";
 
 const MOCK_ORDERS = [
   { id: 1, numero: "CMD-001", client: "Marie D.", articles: "Coffret Mariage Premium", montant: "89,00 €", statut: "PAID", date: "28 fév. 2025" },
@@ -52,7 +52,7 @@ export default function AdminCommandesPage() {
       {/* Filters */}
       <div className="flex flex-col gap-4 rounded-xl border border-warm-dark/20 bg-white p-4 shadow-sm sm:flex-row sm:flex-wrap sm:items-end">
         <div className="relative flex-1 min-w-[200px]">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-text-light" />
+          <LuSearch className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-text-light" />
           <input
             type="text"
             placeholder="Rechercher..."
@@ -158,9 +158,9 @@ export default function AdminCommandesPage() {
                         aria-label="Détails"
                       >
                         {expandedId === order.id ? (
-                          <ChevronUp className="h-4 w-4" />
+                          <LuChevronUp className="h-4 w-4" />
                         ) : (
-                          <ChevronDown className="h-4 w-4" />
+                          <LuChevronDown className="h-4 w-4" />
                         )}
                       </button>
                     </td>

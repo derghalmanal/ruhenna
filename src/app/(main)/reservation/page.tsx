@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronLeft, ChevronRight, Check } from "lucide-react";
+import { LuChevronLeft, LuChevronRight, LuCheck } from "react-icons/lu";
 
 const SERVICES = [
   { id: "henne-mariee", name: "Henné Mariée", duration: "90 min", price: 120 },
@@ -97,7 +97,7 @@ export default function ReservationPage() {
                       : "bg-warm-dark/40 text-text-light"
                 }`}
               >
-                {step > i + 1 && <Check className="h-4 w-4" />}
+                {step > i + 1 && <LuCheck className="h-4 w-4" />}
                 {label}
               </div>
             ))}
@@ -147,7 +147,7 @@ export default function ReservationPage() {
                     onClick={handlePrevMonth}
                     className="rounded-full p-2 text-text-light transition-colors hover:bg-primary/10 hover:text-primary"
                   >
-                    <ChevronLeft className="h-5 w-5" />
+                    <LuChevronLeft className="h-5 w-5" />
                   </button>
                   <span className="font-semibold text-text">
                     {MONTHS[calendarMonth]} {calendarYear}
@@ -157,7 +157,7 @@ export default function ReservationPage() {
                     onClick={handleNextMonth}
                     className="rounded-full p-2 text-text-light transition-colors hover:bg-primary/10 hover:text-primary"
                   >
-                    <ChevronRight className="h-5 w-5" />
+                    <LuChevronRight className="h-5 w-5" />
                   </button>
                 </div>
                 <div className="grid grid-cols-7 gap-1 text-center text-sm">
@@ -354,7 +354,7 @@ export default function ReservationPage() {
                 disabled={step === 1}
                 className="flex items-center gap-2 rounded-full border-2 border-primary px-6 py-3 font-semibold text-primary transition-colors disabled:opacity-50"
               >
-                <ChevronLeft className="h-5 w-5" />
+                <LuChevronLeft className="h-5 w-5" />
                 Retour
               </button>
               <button
@@ -368,7 +368,7 @@ export default function ReservationPage() {
                 className="flex items-center gap-2 rounded-full bg-primary px-6 py-3 font-semibold text-text-inverse transition-all hover:bg-primary-light disabled:opacity-50"
               >
                 Suivant
-                <ChevronRight className="h-5 w-5" />
+                <LuChevronRight className="h-5 w-5" />
               </button>
             </div>
           )}

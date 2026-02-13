@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Calendar, List, Ban, Check, X } from "lucide-react";
+import { LuCalendar, LuList, LuBan, LuCheck, LuX } from "react-icons/lu";
 
 const MOCK_APPOINTMENTS = [
   { id: 1, client: "Marie D.", service: "Henné mains complètes", date: "1 mars 2025", heure: "14h00", statut: "En attente" },
@@ -45,7 +45,7 @@ export default function AdminRendezVousPage() {
                   : "text-text hover:bg-warm/50"
               }`}
             >
-              <Calendar className="h-4 w-4" />
+              <LuCalendar className="h-4 w-4" />
               Calendrier
             </button>
             <button
@@ -57,7 +57,7 @@ export default function AdminRendezVousPage() {
                   : "text-text hover:bg-warm/50"
               }`}
             >
-              <List className="h-4 w-4" />
+              <LuList className="h-4 w-4" />
               Liste
             </button>
           </div>
@@ -65,7 +65,7 @@ export default function AdminRendezVousPage() {
             type="button"
             className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 font-medium text-text-inverse transition-colors hover:bg-primary-light"
           >
-            <Ban className="h-4 w-4" />
+            <LuBan className="h-4 w-4" />
             Bloquer un créneau
           </button>
         </div>
@@ -181,7 +181,7 @@ export default function AdminRendezVousPage() {
                             className="rounded-lg p-2 text-green-600 hover:bg-green-100 transition-colors"
                             aria-label="Confirmer"
                           >
-                            <Check className="h-4 w-4" />
+                            <LuCheck className="h-4 w-4" />
                           </button>
                         )}
                         <button
@@ -189,7 +189,7 @@ export default function AdminRendezVousPage() {
                           className="rounded-lg p-2 text-red-600 hover:bg-red-100 transition-colors"
                           aria-label="Annuler"
                         >
-                          <X className="h-4 w-4" />
+                          <LuX className="h-4 w-4" />
                         </button>
                       </div>
                     </td>

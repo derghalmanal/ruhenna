@@ -2,13 +2,13 @@
 
 import Link from "next/link";
 import {
-  ShoppingBag,
-  Euro,
-  Calendar,
-  MessageSquare,
-  Plus,
-  Ban,
-} from "lucide-react";
+  LuShoppingBag,
+  LuEuro,
+  LuCalendar,
+  LuMessageSquare,
+  LuPlus,
+  LuBan,
+} from "react-icons/lu";
 
 const MOCK_ORDERS = [
   { numero: "CMD-001", client: "Marie D.", montant: "89,00 €", statut: "PAID", date: "28 fév. 2025" },
@@ -42,7 +42,7 @@ export default function AdminDashboardPage() {
               <p className="mt-1 text-2xl font-bold text-text">0</p>
             </div>
             <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/15 text-primary">
-              <ShoppingBag className="h-6 w-6" />
+              <LuShoppingBag className="h-6 w-6" />
             </div>
           </div>
         </div>
@@ -55,7 +55,7 @@ export default function AdminDashboardPage() {
               <p className="mt-1 text-2xl font-bold text-text">0 EUR</p>
             </div>
             <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-green-100 text-green-700">
-              <Euro className="h-6 w-6" />
+              <LuEuro className="h-6 w-6" />
             </div>
           </div>
         </div>
@@ -68,7 +68,7 @@ export default function AdminDashboardPage() {
               <p className="mt-1 text-2xl font-bold text-text">0</p>
             </div>
             <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-100 text-blue-700">
-              <Calendar className="h-6 w-6" />
+              <LuCalendar className="h-6 w-6" />
             </div>
           </div>
         </div>
@@ -81,7 +81,7 @@ export default function AdminDashboardPage() {
               <p className="mt-1 text-2xl font-bold text-text">0</p>
             </div>
             <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-100 text-amber-700">
-              <MessageSquare className="h-6 w-6" />
+              <LuMessageSquare className="h-6 w-6" />
             </div>
           </div>
         </div>
@@ -176,14 +176,14 @@ export default function AdminDashboardPage() {
           href="/admin/produits/nouveau"
           className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 font-medium text-text-inverse transition-colors hover:bg-primary-light"
         >
-          <Plus className="h-4 w-4" />
+          <LuPlus className="h-4 w-4" />
           Ajouter un produit
         </Link>
         <button
           type="button"
           className="inline-flex items-center gap-2 rounded-lg border border-warm-dark/40 bg-white px-4 py-2.5 font-medium text-text transition-colors hover:bg-warm/50"
         >
-          <Ban className="h-4 w-4" />
+          <LuBan className="h-4 w-4" />
           Bloquer un créneau
         </button>
       </div>

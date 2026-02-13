@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { ShoppingCart, ChevronDown } from "lucide-react";
+import { LuShoppingCart, LuChevronDown } from "react-icons/lu";
 
 const CATEGORIES = [
   { id: "tous", label: "Tous" },
@@ -63,7 +63,7 @@ export default function BoutiquePage() {
             <div className="lg:hidden">
               <button onClick={() => setMobileCategoryOpen(!mobileCategoryOpen)} className="flex w-full items-center justify-between rounded-xl border border-warm-dark/40 bg-white px-4 py-3 font-medium text-text">
                 {CATEGORIES.find((c) => c.id === category)?.label ?? "Catégorie"}
-                <ChevronDown className={`h-5 w-5 transition-transform ${mobileCategoryOpen ? "rotate-180" : ""}`} />
+                <LuChevronDown className={`h-5 w-5 transition-transform ${mobileCategoryOpen ? "rotate-180" : ""}`} />
               </button>
               {mobileCategoryOpen && (
                 <div className="mt-2 rounded-xl border border-warm-dark/40 bg-white p-2">
@@ -94,7 +94,7 @@ export default function BoutiquePage() {
                         {product.compareAtPrice && (<span className="text-sm text-text-light line-through">{product.compareAtPrice.toFixed(2)} €</span>)}
                       </div>
                       <button type="button" className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-3 font-semibold text-text-inverse transition-colors hover:bg-primary-light">
-                        <ShoppingCart className="h-4 w-4" />
+                        <LuShoppingCart className="h-4 w-4" />
                         Ajouter au panier
                       </button>
                     </div>

@@ -1,14 +1,14 @@
 import Link from "next/link";
 import Image from "next/image";
 import {
-  Sparkles,
-  Calendar,
-  Gift,
-  Truck,
-  Shield,
-  Star,
-  CreditCard,
-} from "lucide-react";
+  LuSparkles,
+  LuCalendar,
+  LuGift,
+  LuTruck,
+  LuShield,
+  LuStar,
+  LuCreditCard,
+} from "react-icons/lu";
 import { siteConfig } from "@/lib/env";
 
 const galleryImages = [
@@ -22,21 +22,21 @@ const galleryImages = [
 
 const services = [
   {
-    icon: Sparkles,
+    icon: LuSparkles,
     title: "Art du henné",
     description:
       "Découvrez nos créations uniques et sur-mesure pour sublimer vos événements.",
     href: "/services/henne",
   },
   {
-    icon: Calendar,
+    icon: LuCalendar,
     title: "Événements",
     description:
       "Mariages, anniversaires… Nous nous adaptons à chaque occasion.",
     href: "/services/evenements",
   },
   {
-    icon: Gift,
+    icon: LuGift,
     title: "Cadeaux personnalisés",
     description:
       "Offrez un moment d'exception avec nos coffrets et prestations cadeaux.",
@@ -179,25 +179,25 @@ export default function HomePage() {
           <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
             <div className="flex flex-col items-center gap-3 text-center">
               <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
-                <Truck className="h-6 w-6" />
+                <LuTruck className="h-6 w-6" />
               </div>
               <span className="font-medium text-text">Livraison soignée</span>
             </div>
             <div className="flex flex-col items-center gap-3 text-center">
               <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
-                <Shield className="h-6 w-6" />
+                <LuShield className="h-6 w-6" />
               </div>
               <span className="font-medium text-text">Qualité artisanale</span>
             </div>
             <div className="flex flex-col items-center gap-3 text-center">
               <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
-                <Star className="h-6 w-6" />
+                <LuStar className="h-6 w-6" />
               </div>
               <span className="font-medium text-text">Avis 5 étoiles</span>
             </div>
             <div className="flex flex-col items-center gap-3 text-center">
               <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
-                <CreditCard className="h-6 w-6" />
+                <LuCreditCard className="h-6 w-6" />
               </div>
               <span className="font-medium text-text">Paiement sécurisé</span>
             </div>

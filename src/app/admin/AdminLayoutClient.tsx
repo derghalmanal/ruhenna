@@ -4,30 +4,30 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  LayoutDashboard,
-  Package,
-  Scissors,
-  Image,
-  Calendar,
-  ShoppingBag,
-  MessageSquare,
-  FileText,
-  Settings,
-  Menu,
-  X,
-  LogOut,
-} from "lucide-react";
+  LuLayoutDashboard,
+  LuPackage,
+  LuScissors,
+  LuImage,
+  LuCalendar,
+  LuShoppingBag,
+  LuMessageSquare,
+  LuFileText,
+  LuSettings,
+  LuMenu,
+  LuX,
+  LuLogOut,
+} from "react-icons/lu";
 
 const navItems = [
-  { href: "/admin", label: "Tableau de bord", icon: LayoutDashboard },
-  { href: "/admin/produits", label: "Produits", icon: Package },
-  { href: "/admin/services", label: "Services", icon: Scissors },
-  { href: "/admin/galerie", label: "Galerie", icon: Image },
-  { href: "/admin/rendez-vous", label: "Rendez-vous", icon: Calendar },
-  { href: "/admin/commandes", label: "Commandes", icon: ShoppingBag },
-  { href: "/admin/messages", label: "Messages", icon: MessageSquare },
-  { href: "/admin/blog", label: "Blog", icon: FileText },
-  { href: "/admin/parametres", label: "Paramètres", icon: Settings },
+  { href: "/admin", label: "Tableau de bord", icon: LuLayoutDashboard },
+  { href: "/admin/produits", label: "Produits", icon: LuPackage },
+  { href: "/admin/services", label: "Services", icon: LuScissors },
+  { href: "/admin/galerie", label: "Galerie", icon: LuImage },
+  { href: "/admin/rendez-vous", label: "Rendez-vous", icon: LuCalendar },
+  { href: "/admin/commandes", label: "Commandes", icon: LuShoppingBag },
+  { href: "/admin/messages", label: "Messages", icon: LuMessageSquare },
+  { href: "/admin/blog", label: "Blog", icon: LuFileText },
+  { href: "/admin/parametres", label: "Paramètres", icon: LuSettings },
 ];
 
 export function AdminLayoutClient({
@@ -96,7 +96,7 @@ export function AdminLayoutClient({
             className="rounded-lg p-2 text-text hover:bg-warm/50"
             aria-label="Fermer le menu"
           >
-            <X className="h-6 w-6" />
+            <LuX className="h-6 w-6" />
           </button>
         </div>
         <nav className="space-y-1 px-3 py-4">
@@ -134,7 +134,7 @@ export function AdminLayoutClient({
             className="rounded-lg p-2 text-text hover:bg-warm/50 lg:hidden"
             aria-label="Ouvrir le menu"
           >
-            <Menu className="h-6 w-6" />
+            <LuMenu className="h-6 w-6" />
           </button>
           <div className="flex flex-1 justify-end items-center gap-4">
             <span className="text-sm font-medium text-text">Admin</span>
@@ -142,7 +142,7 @@ export function AdminLayoutClient({
               type="button"
               className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-text hover:bg-warm/50 transition-colors"
             >
-              <LogOut className="h-4 w-4" />
+              <LuLogOut className="h-4 w-4" />
               Déconnexion
             </button>
           </div>

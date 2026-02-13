@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Save, X } from "lucide-react";
+import { LuSave, LuX } from "react-icons/lu";
 
 const CATEGORIES = [
   { id: "cones", label: "Cônes de Henné" },
@@ -45,7 +45,7 @@ export default function NouveauProduitPage() {
           href="/admin/produits"
           className="inline-flex items-center gap-2 rounded-lg border border-warm-dark/40 px-4 py-2.5 font-medium text-text transition-colors hover:bg-warm/50"
         >
-          <X className="h-4 w-4" />
+          <LuX className="h-4 w-4" />
           Annuler
         </Link>
       </div>
@@ -195,7 +195,7 @@ export default function NouveauProduitPage() {
             type="submit"
             className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 font-medium text-text-inverse transition-colors hover:bg-primary-light"
           >
-            <Save className="h-4 w-4" />
+            <LuSave className="h-4 w-4" />
             Enregistrer
           </button>
           <Link

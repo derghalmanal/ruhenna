@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Gift, ShoppingCart, FileText } from "lucide-react";
+import { LuGift, LuShoppingCart, LuFileText } from "react-icons/lu";
 
 const MOCK_GIFT_PRODUCTS = [
   { id: 1, name: "Coffret Invité Mariage - 1 personne", price: 24.9, compareAtPrice: 29.9, image: "/assets/logo.png" },
@@ -15,7 +15,7 @@ export default function CadeauxPage() {
       <section className="section-padding bg-gradient-to-b from-warm/50 to-bg">
         <div className="container-narrow text-center">
           <div className="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-            <Gift className="h-8 w-8" />
+            <LuGift className="h-8 w-8" />
           </div>
           <h1 className="font-heading text-4xl font-bold tracking-tight text-text md:text-5xl lg:text-6xl">Cadeaux Invités</h1>
           <p className="mt-4 max-w-2xl mx-auto text-lg text-text-light">Offrez à vos invités un moment d&apos;exception avec nos coffrets et sets cadeaux personnalisés pour mariages et événements.</p>
@@ -47,7 +47,7 @@ export default function CadeauxPage() {
                     {product.compareAtPrice && (<span className="text-sm text-text-light line-through">{product.compareAtPrice.toFixed(2)} €</span>)}
                   </div>
                   <button type="button" className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-3 font-semibold text-text-inverse transition-colors hover:bg-primary-light">
-                    <ShoppingCart className="h-4 w-4" />
+                    <LuShoppingCart className="h-4 w-4" />
                     Ajouter au panier
                   </button>
                 </div>
@@ -62,7 +62,7 @@ export default function CadeauxPage() {
           <h2 className="font-heading text-2xl font-bold text-text md:text-3xl">Commande personnalisée ?</h2>
           <p className="mt-3 text-text-light">Besoin d&apos;un coffret sur-mesure pour votre événement ? Demandez un devis gratuit.</p>
           <Link href="/contact?objet=devis" className="mt-6 inline-flex items-center gap-2 rounded-full bg-accent px-8 py-4 font-semibold text-text-inverse shadow-lg transition-all hover:bg-accent-light hover:shadow-xl">
-            <FileText className="h-5 w-5" />
+            <LuFileText className="h-5 w-5" />
             Demander un devis
           </Link>
         </div>
