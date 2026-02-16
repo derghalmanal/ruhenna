@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { hash } from "bcryptjs";
 import { prisma } from "@/lib/db";
 import { bookingSchema } from "@/lib/validations/booking";
+import { sanitizeObject } from "@/lib/sanitize";
 
 function parseTime(t: string): number { const [h, m] = t.split(":").map(Number); return h * 60 + m; }
 function formatTime(m: number): string { return `${Math.floor(m / 60).toString().padStart(2, "0")}:${(m % 60).toString().padStart(2, "0")}`; }
@@ -12,7 +13,7 @@ export async function POST(request: Request) {
     const parsed = bookingSchema.safeParse(body);
     if (!parsed.success) return NextResponse.json({ success: false, errors: parsed.error.flatten().fieldErrors }, { status: 400 });
 
-    const { serviceId, date, startTime, name, email, notes } = parsed.data;
+    const { serviceId, date, startTime, name, email, notes } = sanitizeObject(parsed.data);
     const service = await prisma.service.findUnique({ where: { id: serviceId, active: true } });
     if (!service) return NextResponse.json({ success: false, message: "Service non trouvé" }, { status: 404 });
 

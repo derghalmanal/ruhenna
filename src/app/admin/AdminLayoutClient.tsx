@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { signOut } from "next-auth/react";
 import {
   LuLayoutDashboard,
   LuPackage,
@@ -140,6 +141,7 @@ export function AdminLayoutClient({
             <span className="text-sm font-medium text-text">Admin</span>
             <button
               type="button"
+              onClick={() => signOut({ callbackUrl: "/" })}
               className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-text hover:bg-warm/50 transition-colors"
             >
               <LuLogOut className="h-4 w-4" />
