@@ -4,10 +4,8 @@ import { prisma } from "@/lib/db";
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const category = searchParams.get("category");
     const featured = searchParams.get("featured");
-    const where: { category?: string; featured?: boolean } = {};
-    if (category) where.category = category;
+    const where: { featured?: boolean } = {};
     if (featured === "true") where.featured = true;
     const images = await prisma.galleryImage.findMany({
       where: Object.keys(where).length > 0 ? where : undefined,
@@ -16,6 +14,9 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ images });
   } catch (error) {
     console.error("Gallery API error:", error);
-    return NextResponse.json({ success: false, message: "Erreur lors de la récupération de la galerie" }, { status: 500 });
+    return NextResponse.json(
+      { success: false, message: "Erreur lors de la récupération de la galerie" },
+      { status: 500 },
+    );
   }
 }

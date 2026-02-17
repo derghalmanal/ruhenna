@@ -167,12 +167,11 @@ model OrderItem {
 }
 
 model GalleryImage {
-  id          String    @id @default(cuid())
+  id          String   @id @default(cuid())
   title       String
   description String?
   imageUrl    String
-  category    String?
-  featured    Boolean   @default(false)
+  featured    Boolean  @default(false)
   sortOrder   Int      @default(0)
   createdAt   DateTime @default(now())
 }
@@ -185,7 +184,19 @@ model ContactMessage {
   message    String
   read       Boolean   @default(false)
   archivedAt DateTime?
+  deletedAt  DateTime?
   createdAt  DateTime  @default(now())
+}
+
+model BlockedSlot {
+  id        String   @id @default(cuid())
+  date      DateTime
+  startTime String
+  endTime   String
+  reason    String?
+  createdAt DateTime @default(now())
+
+  @@index([date])
 }
 
 model BlogPost {
