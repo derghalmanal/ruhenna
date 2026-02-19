@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { LuSave, LuX } from "react-icons/lu";
 
 function slugify(text: string) {
@@ -14,14 +14,17 @@ function slugify(text: string) {
     .replace(/(^-|-$)+/g, "");
 }
 
-export default function NouveauBlogPage() {
+export default function ModifierBlogPage() {
   const router = useRouter();
+  const params = useParams();
+  const id = params.id as string;
   const [titre, setTitre] = useState("");
   const [slug, setSlug] = useState("");
   const [extrait, setExtrait] = useState("");
   const [contenu, setContenu] = useState("");
   const [coverImage, setCoverImage] = useState("");
   const [publier, setPublier] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
 
@@ -30,19 +33,42 @@ export default function NouveauBlogPage() {
     setSlug(slugify(value));
   };
 
+  useEffect(() => {
+    fetch(`/api/admin/blog/${id}`)
+      .then((res) => {
+        if (!res.ok) throw new Error("Article introuvable");
+        return res.json();
+      })
+      .then((data) => {
+        const post = data?.post;
+        if (post) {
+          setTitre(post.title);
+          setSlug(post.slug);
+          setExtrait(post.excerpt);
+          setContenu(post.content);
+          setCoverImage(post.coverImage || "");
+          setPublier(post.published);
+        } else {
+          setError("Article introuvable");
+        }
+      })
+      .catch(() => setError("Article introuvable"))
+      .finally(() => setLoading(false));
+  }, [id]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setSubmitting(true);
-    const res = await fetch("/api/admin/blog", {
-      method: "POST",
+    const res = await fetch(`/api/admin/blog/${id}`, {
+      method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         title: titre,
         slug: slug || slugify(titre),
         excerpt: extrait,
         content: contenu,
-        coverImage: coverImage || undefined,
+        coverImage: coverImage || null,
         published: publier,
       }),
     });
@@ -51,14 +77,38 @@ export default function NouveauBlogPage() {
     if (res.ok) {
       router.push("/admin/blog");
     } else {
-      setError(data.error || "Erreur lors de la création");
+      setError(data.error || "Erreur lors de la mise à jour");
     }
   };
+
+  if (loading) {
+    return (
+      <div className="space-y-6">
+        <h1 className="font-heading text-2xl font-bold text-text">Modifier l&apos;article</h1>
+        <p className="text-text-light">Chargement...</p>
+      </div>
+    );
+  }
+
+  if (error && !titre) {
+    return (
+      <div className="space-y-6">
+        <h1 className="font-heading text-2xl font-bold text-text">Modifier l&apos;article</h1>
+        <p className="text-red-600">{error}</p>
+        <Link
+          href="/admin/blog"
+          className="inline-flex items-center gap-2 rounded-lg border border-warm-dark/40 px-4 py-2.5 font-medium text-text hover:bg-warm/50"
+        >
+          Retour
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="font-heading text-2xl font-bold text-text">Nouvel article</h1>
+        <h1 className="font-heading text-2xl font-bold text-text">Modifier l&apos;article</h1>
         <Link
           href="/admin/blog"
           className="inline-flex items-center gap-2 rounded-lg border border-warm-dark/40 px-4 py-2.5 font-medium text-text transition-colors hover:bg-warm/50"
