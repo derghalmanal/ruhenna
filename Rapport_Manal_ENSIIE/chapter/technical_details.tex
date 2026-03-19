@@ -1,0 +1,79 @@
+Cette annexe regroupe des éléments techniques complémentaires : inventaire des routes, variables d’environnement utilisées (sans secrets) et explications de configuration.
+
+\section{Versionnement et stack observée}
+La stack applicative est décrite dans \texttt{package.json}. Les versions exactes peuvent évoluer, mais l’important est la cohérence de l’écosystème (\textit{Next.js/React}, Prisma, PostgreSQL, Tailwind).
+
+Dans ce stage, l’objectif était de rester sur des outils largement documentés et utilisés :
+\begin{itemize}
+    \item \textbf{Frontend} : React + Next.js \cite{reactDocs,nextjsDocs}
+    \item \textbf{Base de données} : PostgreSQL (Neon en production) \cite{neonDocs}
+    \item \textbf{ORM} : Prisma \cite{prismaDocs}
+    \item \textbf{Styles} : Tailwind CSS
+    \item \textbf{Médias} : Cloudinary \cite{cloudinaryDocs}
+\end{itemize}
+
+\section{Variables d’environnement}
+Les secrets (\textit{mots de passe, clés API}) ne doivent pas apparaître dans un document public. La plateforme repose cependant sur les variables suivantes :
+\begin{itemize}
+    \item \texttt{DATABASE\_URL} : chaîne de connexion PostgreSQL (Neon en production).
+    \item \texttt{ADMIN\_USER}, \texttt{ADMIN\_PASS} : identifiants Basic Auth pour l’administration.
+    \item \texttt{CLOUDINARY\_CLOUD\_NAME}, \texttt{CLOUDINARY\_API\_KEY}, \texttt{CLOUDINARY\_API\_SECRET} : configuration Cloudinary.
+    \item \texttt{NEXT\_PUBLIC\_\*} : informations publiques de marque et de contact (nom, réseaux, URL du site).
+\end{itemize}
+
+\section{Structure des dossiers Next.js (public, admin, API)}
+Le projet utilise l’App Router de Next.js, qui organise l’application par dossiers :
+\begin{itemize}
+    \item \textbf{Espace public} : \texttt{src/app/(main)/...} regroupe les pages accessibles aux visiteurs (\texttt{/}, \texttt{/boutique}, \texttt{/blog}, \texttt{/reservation}, etc.). Le layout \texttt{src/app/(main)/layout.tsx} applique le header/footer.
+    \item \textbf{Espace administration} : \texttt{src/app/admin/...} regroupe les pages de gestion (\texttt{/admin/produits}, \texttt{/admin/services}, \texttt{/admin/blog}, etc.), encapsulées par \texttt{src/app/admin/layout.tsx}.
+    \item \textbf{API} : \texttt{src/app/api/.../route.ts} contient les endpoints (publics et admin) appelés depuis les formulaires et l’administration.
+\end{itemize}
+Cette structure permet de séparer clairement l’affichage (pages) et les actions (API), tout en restant dans un seul projet.
+
+\section{Inventaire des principales routes API}
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{6pt}
+\begin{longtable}{@{}p{2.2cm}p{5.2cm}p{6.6cm}@{}}
+\toprule
+\textbf{Méthode} & \textbf{Route} & \textbf{Implémentation} \\
+\midrule
+\endhead
+
+GET & \path{/api/rendez-vous/slots} & \path{src/app/api/rendez-vous/slots/route.ts} : calcul des créneaux disponibles. \\
+POST & \path{/api/rendez-vous} & \path{src/app/api/rendez-vous/route.ts} : création d’une demande de RDV. \\
+POST & \path{/api/contact} & \path{src/app/api/contact/route.ts} : enregistrement d’un message. \\
+POST & \path{/api/upload} & \path{src/app/api/upload/route.ts} : upload images vers Cloudinary. \\
+\midrule
+GET\newline POST & \path{/api/admin/products} & \path{src/app/api/admin/products/route.ts} : liste + création produits (catalogue). \\
+GET\newline PATCH\newline DELETE & \path{/api/admin/products/[id]} & \path{src/app/api/admin/products/[id]/route.ts} : lecture + mise à jour + suppression (avec suppression des images associées). \\
+GET\newline POST\newline PATCH & \path{/api/admin/categories} & \path{src/app/api/admin/categories/route.ts} : liste + création + réordonnancement des catégories. \\
+PATCH\newline DELETE & \path{/api/admin/categories/[id]} & \path{src/app/api/admin/categories/[id]/route.ts} : modification/suppression (avec réaffectation des produits). \\
+GET\newline POST & \path{/api/admin/services} & \path{src/app/api/admin/services/route.ts} : liste + création des prestations. \\
+GET\newline PATCH\newline DELETE & \path{/api/admin/services/[id]} & \path{src/app/api/admin/services/[id]/route.ts} : lire/modifier/supprimer une prestation (si aucun RDV en cours). \\
+GET\newline POST\newline DELETE & \path{/api/admin/services/[id]/availability} & \path{src/app/api/admin/services/[id]/availability/route.ts} : gérer les règles de disponibilité d’un service. \\
+GET\newline PATCH\newline POST & \path{/api/admin/rendez-vous} & \path{src/app/api/admin/rendez-vous/route.ts} : lister/éditer/créer des rendez-vous côté admin. \\
+GET & \path{/api/admin/messages} & \path{src/app/api/admin/messages/route.ts} : inbox/archives des messages (sans supprimés). \\
+PATCH\newline DELETE & \path{/api/admin/messages/[id]} & \path{src/app/api/admin/messages/[id]/route.ts} : marquer lu/archiver + suppression logique. \\
+GET\newline POST & \path{/api/admin/blog} & \path{src/app/api/admin/blog/route.ts} : liste + création d’articles. \\
+GET\newline PATCH\newline DELETE & \path{/api/admin/blog/[id]} & \path{src/app/api/admin/blog/[id]/route.ts} : lecture + mise à jour + suppression (image de couverture incluse). \\
+GET\newline POST & \path{/api/admin/galerie} & \path{src/app/api/admin/galerie/route.ts} : liste + ajout d’images galerie. \\
+PATCH\newline DELETE & \path{/api/admin/galerie/[id]} & \path{src/app/api/admin/galerie/[id]/route.ts} : modifier/supprimer (avec suppression Cloudinary). \\
+PATCH & \path{/api/admin/galerie/reorder} & \path{src/app/api/admin/galerie/reorder/route.ts} : persister l’ordre (champ \texttt{sortOrder}). \\
+GET\newline POST & \path{/api/admin/hero} & \path{src/app/api/admin/hero/route.ts} : liste + ajout d’images bannière. \\
+PATCH\newline DELETE & \path{/api/admin/hero/[id]} & \path{src/app/api/admin/hero/[id]/route.ts} : activer/désactiver + supprimer (avec suppression Cloudinary). \\
+PATCH & \path{/api/admin/hero/reorder} & \path{src/app/api/admin/hero/reorder/route.ts} : persister l’ordre des images “Hero”. \\
+\bottomrule
+\end{longtable}
+\renewcommand{\arraystretch}{1.0}
+
+\section{Accès base de données (Prisma Client)}
+Pour éviter de dupliquer l’initialisation du client Prisma, l’accès DB est centralisé dans un seul module (\texttt{src/lib/prisma.ts}). Le principe est de créer une unique instance de client (singleton), puis de la réutiliser dans les pages serveur et les routes API. Cela réduit le risque de multiplier des connexions à PostgreSQL.
+
+\section{Configuration Cloudinary}
+Cloudinary est configuré via des variables d’environnement (nom de cloud, clé, secret). L’application enregistre en base uniquement des URLs d’images. Lorsqu’un contenu est supprimé dans l’administration, une suppression côté Cloudinary est déclenchée afin d’éviter de conserver des médias orphelins (stockage inutile) \cite{cloudinaryDocs}.
+
+\section{Optimisation des images côté Next.js}
+Pour permettre à \texttt{next/image} d’afficher des images hébergées sur Cloudinary, l’application autorise explicitement le domaine \texttt{res.cloudinary.com} dans la configuration Next.js (\textit{remote patterns}) \cite{nextjsDocs}.
+
+\section{Dépôt GitHub (lien du code)}
+\noindent \texttt{https://github.com/<organisation-ou-utilisateur>/<nom-du-repo>}
