@@ -17,7 +17,7 @@ interface ProductData {
   description: string;
   price: number;
   compareAtPrice: number | null;
-  category: string;
+  category: string | null;
   images: string[];
 }
 
@@ -68,9 +68,11 @@ export default function ProductDetailClient({ product }: { product: ProductData 
       </div>
 
       <div className="flex flex-col">
-        <span className="text-sm font-medium uppercase tracking-wide text-primary">
-          {product.category}
-        </span>
+        {product.category ? (
+          <span className="text-sm font-medium uppercase tracking-wide text-primary">
+            {product.category}
+          </span>
+        ) : null}
 
         <h1 className="mt-2 font-heading text-3xl font-bold tracking-tight text-text md:text-4xl">
           {product.name}

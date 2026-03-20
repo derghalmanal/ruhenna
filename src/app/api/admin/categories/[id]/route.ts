@@ -3,7 +3,7 @@
  *
  * Routes :
  * - PATCH  /api/admin/categories/:id : modifier slug/label (et réaffecter les produits si slug change)
- * - DELETE /api/admin/categories/:id : supprimer une catégorie (en rebasculant les produits)
+ * - DELETE /api/admin/categories/:id : supprimer une catégorie (et décatégoriser les produits)
  */
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
@@ -57,19 +57,11 @@ export async function DELETE(
       return NextResponse.json({ success: false, message: "Catégorie introuvable" }, { status: 404 });
     }
 
-    // Les produits de cette catégorie seront placés dans la première catégorie restante
-    const firstOther = await prisma.productCategory.findFirst({
-      where: { id: { not: id } },
-      orderBy: { sortOrder: "asc" },
-    });
-
     await prisma.$transaction(async (tx: any) => {
-      if (firstOther) {
-        await tx.product.updateMany({
-          where: { category: category.slug },
-          data: { category: firstOther.slug },
-        });
-      }
+      await tx.product.updateMany({
+        where: { category: category.slug },
+        data: { category: null },
+      });
       await tx.productCategory.delete({ where: { id } });
     });
     return NextResponse.json({ success: true });

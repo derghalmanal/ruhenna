@@ -60,10 +60,27 @@ export async function PATCH(
       description?: string;
       price?: number;
       compareAtPrice?: number | null;
-      category?: string;
+      category?: string | null;
       images?: string[];
       active?: boolean;
     };
+
+    const normalizedCategory =
+      category === undefined
+        ? undefined
+        : category == null || String(category).trim() === ""
+          ? null
+          : String(category).trim();
+
+    if (normalizedCategory) {
+      const exists = await prisma.productCategory.findUnique({ where: { slug: normalizedCategory } });
+      if (!exists) {
+        return NextResponse.json(
+          { success: false, message: "Catégorie invalide" },
+          { status: 400 }
+        );
+      }
+    }
 
     const product = await prisma.product.update({
       where: { id },
@@ -73,7 +90,7 @@ export async function PATCH(
         ...(description != null && { description }),
         ...(price != null && { price }),
         ...(compareAtPrice !== undefined && { compareAtPrice }),
-        ...(category != null && { category }),
+        ...(normalizedCategory !== undefined && { category: normalizedCategory }),
         ...(images !== undefined && { images: Array.isArray(images) ? images : [] }),
         ...(active !== undefined && { active }),
       },

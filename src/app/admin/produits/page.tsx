@@ -18,7 +18,7 @@ type Product = {
   description: string;
   price: number | string;
   compareAtPrice: number | string | null;
-  category: string;
+  category: string | null;
   images: string[];
   active: boolean;
   createdAt: string;
@@ -57,7 +57,12 @@ export default function AdminProduitsPage() {
     fetchProducts();
   }, [fetchProducts]);
 
-  const categories = ["Tout voir", ...Array.from(new Set(products.map((p) => p.category).filter(Boolean)))];
+  const categories = [
+    "Tout voir",
+    ...Array.from(
+      new Set(products.map((p) => p.category).filter((c): c is string => Boolean(c)))
+    ),
+  ];
 
   const filteredProducts = products.filter((p) => {
     const matchSearch = p.name.toLowerCase().includes(search.toLowerCase());
@@ -151,7 +156,9 @@ export default function AdminProduitsPage() {
                             {product.active ? "Actif" : "Inactif"}
                           </span>
                         </div>
-                        <p className="text-xs text-text-light mt-1">{product.category}</p>
+                        <p className="text-xs text-text-light mt-1">
+                          {product.category || "Sans catégorie"}
+                        </p>
                       </div>
                       <div className="flex items-center justify-between mt-3">
                         <span className="font-bold text-primary">{formatPrice(product.price)}</span>
@@ -197,7 +204,9 @@ export default function AdminProduitsPage() {
                         </div>
                       </td>
                       <td className="px-6 py-4 text-sm font-bold text-text">{product.name}</td>
-                      <td className="px-6 py-4 text-sm text-text">{product.category}</td>
+                      <td className="px-6 py-4 text-sm text-text">
+                        {product.category || "Sans catégorie"}
+                      </td>
                       <td className="px-6 py-4 text-sm font-medium text-text">{formatPrice(product.price)}</td>
                       <td className="px-6 py-4">
                         <span className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-bold ${product.active ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>

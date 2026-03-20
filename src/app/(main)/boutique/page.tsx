@@ -20,7 +20,7 @@ export default async function BoutiquePage() {
     }),
   ]);
 
-  const productItems = products.map((p: any) => ({
+  const productItems = products.map((p) => ({
     id: p.id,
     name: p.name,
     slug: p.slug,
@@ -47,7 +47,7 @@ export default async function BoutiquePage() {
         <div className="container-narrow">
           <BoutiqueClient
             products={productItems}
-            categoryOrder={categories.map((c: any) => ({ id: c.slug, label: c.label }))}
+            categoryOrder={categories.map((c) => ({ id: c.slug, label: c.label }))}
           />
         </div>
       </section>

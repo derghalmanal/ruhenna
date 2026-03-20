@@ -24,7 +24,7 @@ interface Product {
   description: string;
   price: number;
   compareAtPrice: number | null;
-  category: string;
+  category: string | null;
   images: string[];
   active: boolean;
 }
@@ -80,7 +80,7 @@ export default function ModifierProduitPage() {
           setDescription(p.description);
           setPrix(String(Number(p.price)));
           setPrixCompare(p.compareAtPrice ? String(Number(p.compareAtPrice)) : "");
-          setCategorie(p.category);
+          setCategorie(p.category ?? "");
           setActif(p.active);
           setImages(Array.isArray(p.images) ? p.images : []);
         }
@@ -97,7 +97,9 @@ export default function ModifierProduitPage() {
 
   const categoryOptions = categories.some((c) => c.id === categorie)
     ? categories
-    : [{ id: categorie, label: categorie }, ...categories];
+    : categorie
+      ? [{ id: categorie, label: categorie }, ...categories]
+      : categories;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -116,7 +118,7 @@ export default function ModifierProduitPage() {
           description,
           price,
           compareAtPrice,
-          category: categorie,
+          category: categorie.trim() ? categorie.trim() : null,
           active: actif,
           images,
         }),
@@ -248,6 +250,7 @@ export default function ModifierProduitPage() {
             onFocus={refreshCategories}
             className="mt-1 w-full rounded-lg border border-warm-dark/40 bg-white px-4 py-2.5 text-text focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
           >
+            <option value="">Sans catégorie</option>
             {categoryOptions.map((cat) => (
               <option key={cat.id} value={cat.id}>
                 {cat.label}

@@ -67,8 +67,12 @@ export default async function ProductDetailPage({ params }: Props) {
               Boutique
             </Link>
             <LuChevronRight className="h-3.5 w-3.5" />
-            <span className="capitalize">{product.category}</span>
-            <LuChevronRight className="h-3.5 w-3.5" />
+            {product.category ? (
+              <>
+                <span className="capitalize">{product.category}</span>
+                <LuChevronRight className="h-3.5 w-3.5" />
+              </>
+            ) : null}
             <span className="text-text font-medium truncate max-w-[200px]">
               {product.name}
             </span>

@@ -420,7 +420,7 @@ export default function AdminCategoriesPage() {
         title="Supprimer la catégorie"
         message={
           deleteOpen
-            ? `Supprimer "${deleteOpen.label}" ? Les produits liés seront automatiquement déplacés vers la catégorie "Tout voir".`
+            ? `Supprimer "${deleteOpen.label}" ? Les produits liés se retrouveront automatiquement sans catégorie.`
             : ""
         }
         confirmLabel="Supprimer"

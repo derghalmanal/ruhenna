@@ -3,7 +3,7 @@
 /**
  * Admin — Produits (création).
  *
- * Rôle : créer un produit (texte, prix, catégorie, images, mis en avant).
+ * Rôle : créer un produit (texte, prix, catégorie, images).
  */
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -25,7 +25,6 @@ export default function NouveauProduitPage() {
   const [categorie, setCategorie] = useState("");
   const [categories, setCategories] = useState<CategoryOption[]>([]);
   const [images, setImages] = useState<string[]>([]);
-  const [misEnAvant, setMisEnAvant] = useState(false);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -34,24 +33,23 @@ export default function NouveauProduitPage() {
     try {
       const res = await fetch("/api/admin/categories");
       const data = await res.json();
-      if (res.ok && Array.isArray(data.categories) && data.categories.length > 0) {
-        const normalized = data.categories.map((c: { slug: string; label: string }) => ({
+      if (res.ok && Array.isArray(data.categories)) {
+        const normalized: CategoryOption[] = data.categories.map((c: { slug: string; label: string }) => ({
           id: c.slug,
           label: c.label,
         }));
         setCategories(normalized);
-        if (!normalized.some((c: CategoryOption) => c.id === categorie)) {
-          setCategorie(normalized[0].id);
+        if (categorie && !normalized.some((c) => c.id === categorie)) {
+          setCategorie("");
         }
       }
-    } catch {
-      // fallback to default category list
+    } catch (e) {
+      console.error(e);
     }
   };
 
   useEffect(() => {
     refreshCategories();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleNomChange = (value: string) => {
@@ -63,7 +61,7 @@ export default function NouveauProduitPage() {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await fetch("/api/products", {
+      const res = await fetch("/api/admin/products", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -72,12 +70,12 @@ export default function NouveauProduitPage() {
           description,
           price: parseFloat(prix) || 0,
           compareAtPrice: prixCompare ? parseFloat(prixCompare) : null,
-          category: categorie,
+          category: categorie.trim() ? categorie.trim() : null,
           images: images.length ? images : ["/assets/logo.png"],
         }),
       });
       const data = await res.json();
-      if (res.ok && data.success) {
+      if (res.ok && data.product) {
         window.location.href = "/admin/produits";
       } else {
         setError(data.message ?? "Erreur lors de l'enregistrement");
@@ -188,6 +186,7 @@ export default function NouveauProduitPage() {
             onFocus={refreshCategories}
             className="mt-1 w-full rounded-lg border border-warm-dark/40 bg-white px-4 py-2.5 text-text focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
           >
+            <option value="">Sans catégorie</option>
             {categories.map((cat) => (
               <option key={cat.id} value={cat.id}>
                 {cat.label}

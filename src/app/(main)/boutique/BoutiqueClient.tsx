@@ -17,7 +17,7 @@ export type ProductItem = {
   price: number;
   compareAtPrice: number | null;
   image: string;
-  category: string;
+  category: string | null;
 };
 
 type Props = {
@@ -34,9 +34,9 @@ export default function BoutiqueClient({ products, categoryOrder }: Props) {
     if (categoryOrder && categoryOrder.length > 0) {
       return [{ id: "tout-voir", label: "Tout voir" }, ...categoryOrder];
     }
-    const cats = Array.from(new Set(products.map((p) => p.category).filter(Boolean))).sort((a, b) =>
-      a.localeCompare(b, "fr")
-    );
+    const cats = Array.from(
+      new Set(products.map((p) => p.category).filter((c): c is string => Boolean(c)))
+    ).sort((a, b) => a.localeCompare(b, "fr"));
     return [{ id: "tout-voir", label: "Tout voir" }, ...cats.map((c) => ({ id: c, label: c }))];
   }, [products, categoryOrder]);
 

@@ -17,9 +17,9 @@ datasource db {
   provider = "postgresql"
 }
 
-//generator erd {
-// provider = "prisma-erd-generator"
-//}
+generator erd {
+ provider = "prisma-erd-generator"
+}
 
 
 enum AppointmentStatus {
@@ -36,13 +36,21 @@ model Product {
   description    String
   price          Decimal  @db.Decimal(10, 2)
   compareAtPrice Decimal? @db.Decimal(10, 2)
-  category       String
+  category       String?
   images         String[]
   active         Boolean  @default(true)
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
   @@index([slug])
+}
+
+model ProductCategory {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  label     String
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
 }
 
 model Service {
@@ -142,13 +150,5 @@ model HeroImage {
   imageUrl  String
   sortOrder Int      @default(0)
   active    Boolean  @default(true)
-  createdAt DateTime @default(now())
-}
-
-model ProductCategory {
-  id        String   @id @default(cuid())
-  slug      String   @unique
-  label     String
-  sortOrder Int      @default(0)
   createdAt DateTime @default(now())
 }

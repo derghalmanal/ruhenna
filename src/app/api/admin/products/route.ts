@@ -39,16 +39,29 @@ export async function POST(request: NextRequest) {
       description: string;
       price: number;
       compareAtPrice?: number;
-      category: string;
+      category?: string | null;
       images: string[];
       active?: boolean;
     };
 
-    if (!name || !slug || !description || price == null || !category) {
+    if (!name || !slug || !description || price == null) {
       return NextResponse.json(
-        { success: false, message: "name, slug, description, price, category requis" },
+        { success: false, message: "name, slug, description, price requis" },
         { status: 400 }
       );
+    }
+
+    const normalizedCategory =
+      category == null || String(category).trim() === "" ? null : String(category).trim();
+
+    if (normalizedCategory) {
+      const exists = await prisma.productCategory.findUnique({ where: { slug: normalizedCategory } });
+      if (!exists) {
+        return NextResponse.json(
+          { success: false, message: "Catégorie invalide" },
+          { status: 400 }
+        );
+      }
     }
 
     const product = await prisma.product.create({
@@ -58,7 +71,7 @@ export async function POST(request: NextRequest) {
         description,
         price,
         compareAtPrice: compareAtPrice ?? null,
-        category,
+        category: normalizedCategory,
         images: Array.isArray(images) ? images : [],
         active: active ?? true,
       },
