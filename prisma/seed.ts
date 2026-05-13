@@ -50,14 +50,16 @@ async function main() {
   for (const p of products) {
     await prisma.product.upsert({
       where: { slug: p.slug },
-      update: {},
+      update: {
+        category: { connect: { slug: p.category } },
+      },
       create: {
         name: p.name,
         slug: p.slug,
         description: p.description,
         price: p.price,
         compareAtPrice: p.compareAtPrice ?? null,
-        category: p.category,
+        category: { connect: { slug: p.category } },
         images: [],
         active: true,
       },

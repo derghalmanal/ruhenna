@@ -20,6 +20,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const product = await prisma.product.findUnique({
     where: { slug },
+    include: { category: true },
   });
 
   if (!product || !product.active) {
@@ -41,6 +42,7 @@ export default async function ProductDetailPage({ params }: Props) {
   const { slug } = await params;
   const product = await prisma.product.findUnique({
     where: { slug },
+    include: { category: true },
   });
 
   if (!product || !product.active) {
@@ -54,7 +56,7 @@ export default async function ProductDetailPage({ params }: Props) {
     description: product.description,
     price: Number(product.price),
     compareAtPrice: product.compareAtPrice ? Number(product.compareAtPrice) : null,
-    category: product.category,
+    category: product.category?.slug ?? null,
     images: product.images,
   };
 
@@ -69,7 +71,7 @@ export default async function ProductDetailPage({ params }: Props) {
             <LuChevronRight className="h-3.5 w-3.5" />
             {product.category ? (
               <>
-                <span className="capitalize">{product.category}</span>
+                <span className="capitalize">{product.category.slug}</span>
                 <LuChevronRight className="h-3.5 w-3.5" />
               </>
             ) : null}

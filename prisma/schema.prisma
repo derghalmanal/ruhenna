@@ -18,9 +18,14 @@ datasource db {
 }
 
 //generator erd {
-// provider = "prisma-erd-generator"
+//  provider = "prisma-erd-generator"
+//  output   = "./ERD.svg"
 //}
 
+//generator erdPng {
+//  provider = "prisma-erd-generator"
+//  output   = "./ERD.png"
+//}
 
 enum AppointmentStatus {
   PENDING
@@ -36,13 +41,15 @@ model Product {
   description    String
   price          Decimal  @db.Decimal(10, 2)
   compareAtPrice Decimal? @db.Decimal(10, 2)
-  category       String?
+  categoryId     String?
+  category       ProductCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
   images         String[]
   active         Boolean  @default(true)
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
   @@index([slug])
+  @@index([categoryId])
 }
 
 model ProductCategory {
@@ -51,6 +58,8 @@ model ProductCategory {
   label     String
   sortOrder Int      @default(0)
   createdAt DateTime @default(now())
+
+  products  Product[]
 }
 
 model Service {
@@ -103,8 +112,8 @@ model Appointment {
 
   service Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
 
-  @@unique([date, startTime])
   @@index([date])
+  @@index([serviceId, date])
 }
 
 model GalleryImage {

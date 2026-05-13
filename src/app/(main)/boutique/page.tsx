@@ -13,6 +13,7 @@ export default async function BoutiquePage() {
   const [products, categories] = await Promise.all([
     prisma.product.findMany({
       where: { active: true },
+      include: { category: true },
       orderBy: { createdAt: "desc" },
     }),
     prisma.productCategory.findMany({
@@ -27,7 +28,7 @@ export default async function BoutiquePage() {
     price: Number(p.price),
     compareAtPrice: p.compareAtPrice != null ? Number(p.compareAtPrice) : null,
     image: p.images?.[0] ?? "/assets/logo.png",
-    category: p.category,
+    category: p.category?.slug ?? null,
   }));
 
   return (

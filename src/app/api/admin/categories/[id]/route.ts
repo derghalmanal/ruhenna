@@ -26,15 +26,7 @@ export async function PATCH(
     if (Object.keys(data).length === 0) {
       return NextResponse.json({ success: false, message: "Aucune donnée à mettre à jour" }, { status: 400 });
     }
-    await prisma.$transaction(async (tx: any) => {
-      await tx.productCategory.update({ where: { id }, data });
-      if (data.slug && data.slug !== existing.slug) {
-        await tx.product.updateMany({
-          where: { category: existing.slug },
-          data: { category: data.slug },
-        });
-      }
-    });
+    await prisma.productCategory.update({ where: { id }, data });
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Admin category PATCH error:", error);
@@ -57,13 +49,7 @@ export async function DELETE(
       return NextResponse.json({ success: false, message: "Catégorie introuvable" }, { status: 404 });
     }
 
-    await prisma.$transaction(async (tx: any) => {
-      await tx.product.updateMany({
-        where: { category: category.slug },
-        data: { category: null },
-      });
-      await tx.productCategory.delete({ where: { id } });
-    });
+    await prisma.productCategory.delete({ where: { id } });
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Admin category DELETE error:", error);

@@ -1,15 +1,9 @@
 /**
- * API admin — Rendez-vous.
- *
- * Routes :
- * - GET   /api/admin/rendez-vous : lister (filtrable par statut)
- * - PATCH /api/admin/rendez-vous : mettre à jour (statut, infos client, date/heure)
- * - POST  /api/admin/rendez-vous : créer un rendez-vous confirmé manuellement
+ * API admin - Rendez-vous.
  */
 import { NextRequest, NextResponse } from "next/server";
+import { AppointmentStatus, type Prisma } from "@prisma/client";
 import prisma from "@/lib/prisma";
-
-// --- HELPERS ---
 
 function parseTime(t: string): number {
   const [h, m] = t.split(":").map(Number);
@@ -23,7 +17,6 @@ function formatTime(m: number): string {
 function parseDateInput(date: string): Date | null {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return null;
   const [y, mo, d] = date.split("-").map(Number);
-  // Important: On force l'heure à midi pour éviter les problèmes de fuseau horaire
   return new Date(Date.UTC(y, mo - 1, d, 12, 0, 0));
 }
 
@@ -34,21 +27,51 @@ function formatDateInput(date: Date): string {
   return `${y}-${m}-${d}`;
 }
 
-// --- ROUTES ---
+function getDayRange(date: string) {
+  const [y, mo, d] = date.split("-").map(Number);
+  return {
+    startOfDay: new Date(Date.UTC(y, mo - 1, d, 0, 0, 0, 0)),
+    endOfDay: new Date(Date.UTC(y, mo - 1, d, 23, 59, 59, 999)),
+  };
+}
 
-/**
- * GET : Récupère les rendez-vous filtrés par STATUT uniquement
- */
+function overlaps(startA: string, endA: string, startB: string, endB: string): boolean {
+  const s1 = parseTime(startA);
+  const e1 = parseTime(endA);
+  const s2 = parseTime(startB);
+  const e2 = parseTime(endB);
+  return s1 < e2 && e1 > s2;
+}
+
+async function hasAppointmentConflict(params: {
+  date: string;
+  startTime: string;
+  endTime: string;
+  excludeId?: string;
+}) {
+  const { startOfDay, endOfDay } = getDayRange(params.date);
+  const appointments = await prisma.appointment.findMany({
+    where: {
+      ...(params.excludeId ? { id: { not: params.excludeId } } : {}),
+      date: { gte: startOfDay, lte: endOfDay },
+      status: { not: "CANCELLED" },
+    },
+  });
+
+  return appointments.some((appointment) =>
+    overlaps(params.startTime, params.endTime, appointment.startTime, appointment.endTime)
+  );
+}
+
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const statusParam = searchParams.get("status");
 
-    const where: any = {};
-
+    const where: Prisma.AppointmentWhereInput = {};
     const validStatuses = ["PENDING", "CONFIRMED", "CANCELLED", "COMPLETED"];
     if (statusParam && validStatuses.includes(statusParam)) {
-      where.status = statusParam;
+      where.status = statusParam as AppointmentStatus;
     }
 
     const appointments = await prisma.appointment.findMany({
@@ -66,9 +89,6 @@ export async function GET(request: NextRequest) {
   }
 }
 
-/**
- * PATCH : Met à jour un rendez-vous (Statut, Infos Client, ou Horaire)
- */
 export async function PATCH(request: NextRequest) {
   try {
     const body = await request.json();
@@ -83,31 +103,25 @@ export async function PATCH(request: NextRequest) {
 
     if (!existing) return NextResponse.json({ message: "Rendez-vous introuvable" }, { status: 404 });
 
-    const updateData: any = {};
-
-    // 1. Mise à jour du statut
+    const updateData: Prisma.AppointmentUncheckedUpdateInput = {};
     const validStatuses = ["PENDING", "CONFIRMED", "CANCELLED", "COMPLETED"];
     if (status && validStatuses.includes(status)) {
       updateData.status = status;
     }
 
-    // 2. Mise à jour des infos client
     if (name !== undefined) updateData.clientName = name.trim() || null;
     if (email !== undefined) updateData.clientEmail = email.trim() || null;
     if (phone !== undefined) updateData.clientPhone = phone.trim() || null;
     if (notes !== undefined) updateData.notes = notes.trim() || null;
 
-    // 3. Gestion du changement de service, de date ou d'horaire
     const hasTimeChange = date !== undefined || startTime !== undefined;
     const hasServiceChange = serviceId !== undefined && serviceId !== existing.serviceId;
 
     if (hasTimeChange || hasServiceChange) {
-      // Déterminer les nouvelles valeurs (ou garder les anciennes)
       const targetServiceId = serviceId ?? existing.serviceId;
       const targetDateStr = date ?? formatDateInput(existing.date);
       const targetStartTime = startTime ?? existing.startTime;
 
-      // Récupérer la durée du service cible
       let targetDuration = existing.service.duration;
       if (hasServiceChange) {
         const targetService = await prisma.service.findUnique({
@@ -121,25 +135,22 @@ export async function PATCH(request: NextRequest) {
       const parsedDate = parseDateInput(targetDateStr);
       if (!parsedDate) return NextResponse.json({ message: "Format de date invalide (YYYY-MM-DD)" }, { status: 400 });
 
-      // Vérification des conflits (si on change l'heure ou la date)
-      if (hasTimeChange) {
-        const conflict = await prisma.appointment.findFirst({
-          where: { 
-            id: { not: id }, // Exclure le RDV actuel
-            date: parsedDate, 
-            startTime: targetStartTime,
-            status: { not: "CANCELLED" } // Optionnel : Ignorer les RDV annulés
-          },
-        });
+      const targetEndTime = formatTime(parseTime(targetStartTime) + targetDuration);
+      const conflict = await hasAppointmentConflict({
+        date: targetDateStr,
+        startTime: targetStartTime,
+        endTime: targetEndTime,
+        excludeId: id,
+      });
 
-        if (conflict) return NextResponse.json({ message: "Ce créneau est déjà réservé" }, { status: 409 });
+      if (conflict) {
+        return NextResponse.json({ message: "Ce creneau est deja reserve" }, { status: 409 });
       }
 
-      // Appliquer les changements horaires
       updateData.serviceId = targetServiceId;
       updateData.date = parsedDate;
       updateData.startTime = targetStartTime;
-      updateData.endTime = formatTime(parseTime(targetStartTime) + targetDuration);
+      updateData.endTime = targetEndTime;
     }
 
     const updatedAppointment = await prisma.appointment.update({
@@ -151,13 +162,10 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json({ appointment: updatedAppointment });
   } catch (error) {
     console.error("PATCH error:", error);
-    return NextResponse.json({ message: "Erreur lors de la mise à jour" }, { status: 500 });
+    return NextResponse.json({ message: "Erreur lors de la mise a jour" }, { status: 500 });
   }
 }
 
-/**
- * POST : Création manuelle d'un rendez-vous par l'Admin
- */
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -165,26 +173,38 @@ export async function POST(request: NextRequest) {
 
     if (!serviceId) return NextResponse.json({ message: "L'ID du service est requis" }, { status: 400 });
 
-    const service = await prisma.service.findUnique({ 
-      where: { id: serviceId }, 
-      select: { id: true, duration: true } 
+    const service = await prisma.service.findUnique({
+      where: { id: serviceId },
+      select: { id: true, duration: true },
     });
 
     if (!service) return NextResponse.json({ message: "Service introuvable" }, { status: 404 });
 
-    const parsedDate = date ? parseDateInput(date) : new Date();
+    const targetDateStr = date ?? formatDateInput(new Date());
+    const parsedDate = parseDateInput(targetDateStr);
     if (!parsedDate) return NextResponse.json({ message: "Format de date invalide" }, { status: 400 });
 
     const finalStartTime = startTime || "09:00";
+    const finalEndTime = formatTime(parseTime(finalStartTime) + service.duration);
+
+    const conflict = await hasAppointmentConflict({
+      date: targetDateStr,
+      startTime: finalStartTime,
+      endTime: finalEndTime,
+    });
+
+    if (conflict) {
+      return NextResponse.json({ message: "Ce creneau est deja reserve" }, { status: 409 });
+    }
 
     const appointment = await prisma.appointment.create({
       data: {
         serviceId: service.id,
         date: parsedDate,
         startTime: finalStartTime,
-        endTime: formatTime(parseTime(finalStartTime) + service.duration),
+        endTime: finalEndTime,
         status: "CONFIRMED",
-        clientName: name?.trim() || "Invité",
+        clientName: name?.trim() || "Invite",
         clientEmail: email?.trim() || null,
         clientPhone: phone?.trim() || null,
         notes: notes?.trim() || null,
@@ -195,6 +215,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ appointment }, { status: 201 });
   } catch (error) {
     console.error("POST error:", error);
-    return NextResponse.json({ message: "Erreur lors de la création" }, { status: 500 });
+    return NextResponse.json({ message: "Erreur lors de la creation" }, { status: 500 });
   }
 }

@@ -220,14 +220,14 @@ export default function ReservationClient({ services }: { services: Service[] })
   if (success) {
     return (
       <main>
-        <section className="section-padding bg-gradient-to-b from-warm/50 to-bg">
+        <section className="bg-gradient-to-b from-warm/50 to-bg py-8 md:py-10">
           <div className="container-narrow">
             <h1 className="font-heading text-center text-4xl font-bold tracking-tight text-text md:text-5xl">
               Demande envoyée
             </h1>
           </div>
         </section>
-        <section className="section-padding bg-bg">
+        <section className="bg-bg py-8 md:py-12">
           <div className="container-narrow max-w-2xl text-center">
             <div className="glass-card p-8">
               <LuCheck className="mx-auto h-16 w-16 text-primary" />
@@ -265,22 +265,22 @@ export default function ReservationClient({ services }: { services: Service[] })
 
   return (
     <main>
-      <section className="section-padding bg-gradient-to-b from-warm/50 to-bg">
+      <section className="bg-gradient-to-b from-warm/50 to-bg py-6 md:py-8">
         <div className="container-narrow">
-          <h1 className="font-heading text-center text-4xl font-bold tracking-tight text-text md:text-5xl">
+          <h1 className="font-heading text-center text-3xl font-bold tracking-tight text-text md:text-4xl">
             Réservation
           </h1>
-          <p className="mt-4 text-center text-lg text-text-light">
+          <p className="mt-3 text-center text-base text-text-light">
             Choisissez votre prestation et réservez en quelques clics.
           </p>
 
           {/* Mention zone d'intervention */}
-          <p className="mt-2 text-center text-sm text-text-light">
+          <p className="mt-1.5 text-center text-sm text-text-light">
             Basée à <strong>Drancy (93)</strong>, je me déplace dans toute l&apos;Île-de-France.
             Des frais de déplacement peuvent s&apos;appliquer selon la distance.
           </p>
 
-          <div className="mt-10 flex flex-wrap justify-center gap-2">
+          <div className="mt-6 flex flex-wrap justify-center gap-2">
             {STEPS.map((label, i) => (
               <div
                 key={label}
@@ -299,8 +299,8 @@ export default function ReservationClient({ services }: { services: Service[] })
         </div>
       </section>
 
-      <section className="section-padding bg-bg">
-        <div className="container-narrow max-w-2xl">
+      <section className="bg-bg py-8 md:py-10">
+        <div className="container-narrow">
           {step === 1 && (
             <div className="space-y-6">
               <h2 className="font-heading text-xl font-semibold text-text">
